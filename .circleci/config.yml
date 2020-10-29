@@ -12,6 +12,7 @@ jobs:
           command: |
             echo run a build command here
             echo $(date +"%FT%T%z") | tee builded_time
+            pwd; ls -ltsv
   deploy:
     machine:
       image: circleci/classic:edge
