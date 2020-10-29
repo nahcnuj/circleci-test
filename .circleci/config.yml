@@ -12,12 +12,10 @@ jobs:
           command: |
             echo run a build command here
             echo $(date +"%FT%T%z") | tee builded_time
-            pwd; ls -ltsv
   deploy:
     machine:
       image: circleci/classic:edge
     steps:
-      - checkout
       - add_ssh_keys:
           fingerprints:
             - "04:aa:70:e5:2d:54:4f:e0:41:19:87:f0:61:b3:f9:6c"
