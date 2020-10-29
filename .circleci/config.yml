@@ -2,13 +2,34 @@
 version: 2.1
 # Use a package of configuration called an orb.
 orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
+  build:
+    machine:
+      image: circleci/classic:edge
+    steps:
+      - checkout
+      - run:
+          name: run pseudo command
+          command: |
+            echo run a build command here
+            echo $(date +"%FT%T%z") >>builded_dates
+  deploy:
+    machine:
+      image: circleci/classic:edge
+    steps:
+      - checkout
+      - add_ssh_keys:
+      - run: ssh ${USER_NAME}@${HOST_NAME} 'cd circleci-test && git pull && echo docker-compose up -d'
+
 # Orchestrate or schedule a set of jobs
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  version: 2
+  build_and_deploy:
     jobs:
-      - welcome/run
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
 
