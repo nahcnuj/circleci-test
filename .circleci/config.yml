@@ -11,7 +11,6 @@ jobs:
           name: run pseudo command
           command: |
             echo run a build command here
-            echo $(date +"%FT%T%z") >>builded_dates
   deploy:
     machine:
       image: circleci/classic:edge
@@ -20,8 +19,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "04:aa:70:e5:2d:54:4f:e0:41:19:87:f0:61:b3:f9:6c"
-      - run: echo ssh -v ${USER_NAME}@${HOST_NAME}
-      - run: ssh -v ${USER_NAME}@${HOST_NAME} 'cd circleci-test && git pull && echo docker-compose up -d'
+      - run: ssh ${USER_NAME}@${HOST_NAME} 'cd circleci-test && git pull && echo docker-compose up -d'
 
 # Orchestrate or schedule a set of jobs
 workflows:
